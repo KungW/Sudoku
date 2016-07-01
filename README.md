@@ -9,15 +9,19 @@
 
 网址：http://www.llang.net/sudoku/type0.html
 
-采集方法:selnium webdriver爬虫
+采集方法:Selnium + PhantomJS
 
 网站对爬虫基本没有限制，采集比较容易
+
 
 2.做题模块——parser
 
 测试了一千左右的不完全标准地图样本，大概通过率70%左右
 
-猜想哪里还有bug
+阶数一上去，会触发bug，通过率非常低，
+
+关于阶数，难度，在更新的数据库中加了grade列，便于分级测试
+
 
 3.出题模块——map_generator
 

@@ -1,4 +1,4 @@
-__author__ = 'Tony Lu'
+__author__ = 'Lyn  <tonylu716@gmail.com>'
 
 from SudokuMapGenerator import *
 

@@ -1,7 +1,6 @@
 #coding:utf-8
 
-__author__ = 'Tony Lu'
-
+__author__ = 'Lyn  <tonylu716@gmail.com>'
 from func import *
 
 if __name__=="__main__":
