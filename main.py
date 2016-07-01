@@ -9,7 +9,7 @@ from CrackWebSudoku import *
 if __name__=="__main__":
 
     map_list = read_saved_maps(
-        map_data_set_file = file('map_data_set.txt','r')
+        map_data_set_file = file('maps/map_data_set.txt','r')
     )
 
     main_test(map_list)

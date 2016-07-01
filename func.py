@@ -72,7 +72,7 @@ def main_test(
 
     if need_save_error_map_set:
         if not error_map_set_file:
-            error_map_set_file = file('err_map_set.txt','a')
+            error_map_set_file = file('maps/err_map_set.txt','a')
         #保存错误数据
         if save_maps(
             map_list = err_map_list,
@@ -82,7 +82,7 @@ def main_test(
 
     if need_save_multi_answer_map_set:
         if not multi_answer_map_set_file:
-            multi_answer_map_set_file = file('multi_answer_map_set.txt','a')
+            multi_answer_map_set_file = file('maps/multi_answer_map_set.txt','a')
         #保存多解地图数据
         if save_maps(
             map_list = multi_answer_map_list,
