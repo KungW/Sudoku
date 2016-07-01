@@ -1,5 +1,5 @@
 #coding:utf-8
-__author__ = 'Administrator'
+__author__ = 'Tony Lu'
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By

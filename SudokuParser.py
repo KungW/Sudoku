@@ -1,4 +1,7 @@
 #coding:utf-8
+
+__author__ = 'Tony Lu'
+
 from SudokuMapGenerator import SudokuMapGenerator
 import time
 

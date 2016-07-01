@@ -1,5 +1,5 @@
 #coding:utf-8
-__author__ = 'Administrator'
+__author__ = 'Tony Lu'
 
 from SudokuParser import SudokuParser
 from SudokuSpider import SudokuSpider

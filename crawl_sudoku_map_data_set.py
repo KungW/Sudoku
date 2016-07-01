@@ -1,6 +1,6 @@
 #coding:utf-8
 
-__author__ = 'Administrator'
+__author__ = 'Tony Lu'
 
 from SudokuSpider import SudokuSpider
 
