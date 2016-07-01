@@ -142,6 +142,7 @@ class SudokuMapGenerator(object):
         #print 'search_field:',potential_value_set
 
     def show(self,extend_map=None):
+        '''将内部或外部地图以友好的形式展示在控制台'''
         map = None
         if extend_map:
             map = extend_map

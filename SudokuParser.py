@@ -143,16 +143,15 @@ class SudokuParser(object):
             map = extend_map
         else:
             map = self.map
-        for i in range(9):
+        for i in range(0,9):
             row_str = ''
-            for j in range(9):
+            for j in range(0,9):
                 row_str += str(map[i][j])+' '
                 if (j+1)%3==0:
                     row_str += '| '
             if (i)%3==0:
-                #print('------------------------')
-                pass
-            #print(row_str)
+                print('------------------------')
+            print(row_str)
 
     def backup(self,extend_map=None):
         '''深度拷贝地图，做备份'''
@@ -176,9 +175,9 @@ class SudokuParser(object):
             try:
                 if self.answer[i]!=self.answer[i+1]:
                     multi_answer = True
-                    #print('multi_answer:')
+                    print('multi_answer:')
                     self.show(self.answer[i])
-                    #print('--------------------')
+                    print('--------------------')
                     self.show(self.answer[i+1])
             except:
                 pass
@@ -210,7 +209,6 @@ class SudokuParser(object):
                 self.show(self.answer[0])
             else:
                 print('no answer')
-                pass
 
 
     def check_unit(self,i,j):
@@ -247,7 +245,7 @@ class SudokuParser(object):
                 if not self.check_unit(i,j):
                     #print 'in (',str(i),',',str(j),')false!','value = ',self.map[i][j]
                     #print('please see that:')
-                    self.show()
+                    #self.show()
                     return False
         #print('check_success!!!')
         return True

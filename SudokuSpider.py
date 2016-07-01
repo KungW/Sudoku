@@ -5,22 +5,37 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+from selenium.webdriver.support.select import Select
+import time,pymysql,random
+from threading import Thread
 
-class SudokuSpider(object):
+
+class SudokuSpider(Thread):
     '''
         该类用于爬取某数独网站的地图数据集，便于模型测试
     '''
-    def __init__(self,need_web=True):
+    def __init__(self,need_web=True,visual=False):
+        Thread.__init__(self)
         if need_web:
-            self.driver = webdriver.Chrome()
+            if visual:
+                self.driver = webdriver.Chrome()
+            else:
+                self.driver = webdriver.PhantomJS()
         else:
             pass
 
-    def get_current_arr(self):
+    def run(self):
+        self.crawl_info_to_database()
+        '''
+        txt = file('maps/map_data_set.txt','a')
+        self.crawl_info_to_txt(txt)
+        '''
+
+    def get_current_map_info(self,launched_by_select=False):
         '''得到当前页面上地图的一维数组形式'''
         browser = self.driver
-        while(1):
+        if not launched_by_select:
+            while(1):
                 browser.get("http://www.llang.net/sudoku/type0.html")
                 try:
                     if WebDriverWait(browser, 10).until(
@@ -29,8 +44,7 @@ class SudokuSpider(object):
                         break
                 except:
                     print('网页加载异常,重复访问...')
-        ele = browser.find_element_by_xpath('//*[@id="sudokuform"]/center/table')
-        blank_list = ele.find_elements_by_tag_name('input')
+        blank_list = browser.find_element_by_xpath('//*[@id="sudokuform"]/center/table').find_elements_by_tag_name('input')
         value_list = map(lambda x:x.get_attribute('value'),blank_list)
         arr = []
         for i in value_list:
@@ -38,7 +52,17 @@ class SudokuSpider(object):
                 arr.append(i)
             else:
                 arr.append('0')
-        return arr
+        map_id = browser.find_element_by_xpath('//*[@id="NowSudoku"]').get_attribute('value')[1:-1].strip(' ')
+        grade_S = Select(browser.find_element_by_xpath('//*[@id="sudokudiff"]'))
+        grade = int(grade_S.all_selected_options[0].get_attribute('value'))
+        return (arr,map_id,grade)
+
+    def change_grade_and_fresh(self):
+        browser = self.driver
+        grade_S = Select(browser.find_element_by_xpath('//*[@id="sudokudiff"]'))
+        grade_S.select_by_value(str(random.randint(0,5)))
+        time.sleep(2)
+        browser.find_element_by_xpath('//*[@id="anotherbutton"]').click()
 
 
     def fill_answer(self,answer_arr):
@@ -55,20 +79,46 @@ class SudokuSpider(object):
 
     def get_current_map_dict(self):
         '''得到当前页面的地图，直接传给模型，用于即时外挂'''
-        arr = self.get_current_arr()
+        arr = self.get_current_map_info()[0]
         return self.arr_to_map_dict(arr)
 
 
-    def crawl_info_to(self,file):
+    def crawl_info_to_txt(self,file):
         '''循环爬取地图，保存到文件中'''
         while(1):
-            arr = self.get_current_arr()
+            arr = self.get_current_map_info()[0]
             data_str = ','.join(arr)
             file.write(data_str+'\n')
             print(data_str+'write_success')
 
 
-    def get_map_list_by_read(self,file):
+    def crawl_info_to_database(self):
+        '''循环爬取地图，保存到数据库中'''
+        conn = pymysql.connect(
+            host='localhost',   port=3306,
+            user='root',        passwd='',
+            db='sudoku_maps',   charset='utf8'
+        )
+        cur = conn.cursor()
+        launch_by_select = False
+        while(1):
+            info_tuple = self.get_current_map_info(launch_by_select)
+            map_str = ','.join(info_tuple[0])
+            print('map_id: {} , grade = {}'.format(info_tuple[1],info_tuple[2]))
+            try:
+                cur.execute(
+                    "insert into maps(map_str,map_id,grade)"
+                    "values (%s,%s,%s)",
+                    (map_str,info_tuple[1],info_tuple[2])
+                )
+                conn.commit()
+            except Exception as e:
+                print(str(e))
+            self.change_grade_and_fresh()
+            launch_by_select = True
+
+
+    def get_map_list_by_read_txt(self,file):
         '''读取保存的地图，用于测试模型'''
         map_list = []
         while 1:
@@ -81,6 +131,19 @@ class SudokuSpider(object):
             map_list.append(self.arr_to_map_dict(arr))
         print('Read success,get {} maps'.format(len(map_list)))
         return map_list
+
+
+    def get_map_list_by_database(self,grade=None):
+        cur = pymysql.connect(
+            host='localhost',   port=3306,
+            user='root',        passwd='',
+            db='sudoku_maps',   charset='utf8'
+        ).cursor()
+        sql = "select map_str from maps "
+        if grade!=None:
+            sql += "where grade="+str(grade)
+        cur.execute(sql)
+        return map(lambda x:self.arr_to_map_dict(x[0].split(',')),cur.fetchall())
 
 
     def arr_to_map_dict(self,arr):

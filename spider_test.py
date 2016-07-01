@@ -4,8 +4,20 @@ __author__ = 'Tony Lu'
 
 from SudokuSpider import SudokuSpider
 
-ss = SudokuSpider()
+import time,pymysql
 
-txt = file('maps/map_data_set.txt','a')
 
-ss.crawl_info_to(txt)
+conn = pymysql.connect(
+    host='localhost',   port=3306,
+    user='root',        passwd='',
+    db='sudoku_maps',   charset='utf8'
+)
+
+
+for i in range(4):
+    ss = SudokuSpider()
+    ss.start()
+
+
+while(1):
+    time.sleep(3)
