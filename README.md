@@ -9,7 +9,7 @@
 
   - 网址：http://www.llang.net/sudoku/type0.html
 
-  - 采集方法:Selnium + PhantomJS
+  - 采集方法:Selenium + PhantomJS
 
   - 网站对爬虫基本没有限制，采集比较容易
 
