@@ -36,8 +36,8 @@ class SudokuSpider(Thread):
         browser = self.driver
         if not launched_by_select:
             while(1):
-                browser.get("http://www.llang.net/sudoku/type0.html")
                 try:
+                    browser.get("http://www.llang.net/sudoku/type0.html")
                     if WebDriverWait(browser, 10).until(
                         EC.presence_of_element_located((By.XPATH,'//*[@id="sudokuform"]/center/table'))
                     ):

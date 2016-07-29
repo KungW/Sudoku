@@ -2,15 +2,7 @@
 __author__ = 'Lyn  <tonylu716@gmail.com>'
 
 from SudokuSpider import SudokuSpider
-import time,pymysql
-
-
-conn = pymysql.connect(
-    host='localhost',   port=3306,
-    user='root',        passwd='',
-    db='sudoku_maps',   charset='utf8'
-)
-
+import time
 
 for i in range(4):
     ss = SudokuSpider()

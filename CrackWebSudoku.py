@@ -18,12 +18,13 @@ def get_current_map_answer(spider):
 
 
 def crack():
-    spider = SudokuSpider(need_web=True)
+    spider = SudokuSpider(need_web=True,visual=True)
     while(1):
         answer_arr = get_current_map_answer(spider)
         print('answer:',answer_arr)
         if answer_arr:
             spider.fill_answer(answer_arr)
+
 
 if __name__=='__main__':
     crack()
