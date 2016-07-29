@@ -9,7 +9,7 @@
 
   - 网址：http://www.llang.net/sudoku/type0.html
 
-  - 采集方法:Selnium + PhantomJS
+  - 采集方法:Selenium + PhantomJS
 
   - 网站对爬虫基本没有限制，采集比较容易
 
@@ -26,4 +26,4 @@
 
 ##3.出题模块——map_generator
 
-    - 由于做题模块的通过率不是极高，出题模块测试起来也没有意义，待2完善后再说
+  - 由于做题模块的通过率不是极高，出题模块测试起来也没有意义，待2完善后再说
